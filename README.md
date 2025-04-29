@@ -26,7 +26,6 @@ Este projeto cria uma visualização interativa do mapa do Brasil usando R. A vi
   - leaflet
   - sf
   - tidyverse
-  - shiny (opcional)
 
 ## 🔧 Instalação
 
