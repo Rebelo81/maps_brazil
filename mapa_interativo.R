@@ -11,7 +11,13 @@ library(htmlwidgets)
 library(plotly)
 library(htmltools)
 
-# 
+# Paleta de Cores
+cores_estados <- c(
+  "#2b6cb0", "#3182ce", "#4299e1", "#63b3ed", "#90cdf4", # Azuis
+  "#38a169", "#48bb78", "#68d391", "#9ae6b4", # Verdes
+  "#805ad5", "#9f7aea", "#b794f4", # Roxos
+  "#d53f8c", "#ed64a6", "#f687b3"  # Rosas
+)
 
 # Mapa
 estados <- read_state()
@@ -39,17 +45,25 @@ regioes_estados <- tibble::tibble(
 estados <- estados %>%
   left_join(regioes_estados, by = "abbrev_state")
 
-# Cores Estados
-set.seed(123)
-cores_estados <- colorRampPalette(colors())(nrow(estados))
-estados$cor_estado <- cores_estados
+# Cores por Região
+cores_regiao <- c(
+  "Norte" = "#2b6cb0",
+  "Nordeste" = "#38a169",
+  "Centro Oeste" = "#805ad5",
+  "Sudeste" = "#d53f8c",
+  "Sul" = "#3182ce"
+)
+
+estados$cor_regiao <- cores_regiao[estados$region]
 
 # Mini Gráfico
 mini_grafico <- function(nome_estado, populacao) {
   paste0(
-    "<div><strong>População Visualizada:</strong></div>",
+    "<div style='background-color: #f7fafc; padding: 10px; border-radius: 5px;'>",
+    "<div style='font-family: Roboto, sans-serif; font-weight: bold; margin-bottom: 10px;'>População Visualizada:</div>",
     "<div style='height:100px;width:200px;'>",
-    "<img src='https://quickchart.io/chart?c={type:%22bar%22,data:{labels:[%22", nome_estado, "%22],datasets:[{data:[", populacao, "]}]}}' style='width:100%;height:100%;'>",
+    "<img src='https://quickchart.io/chart?c={type:%22bar%22,data:{labels:[%22", nome_estado, "%22],datasets:[{data:[", populacao, "],backgroundColor:%22", cores_regiao[estados$region[estados$name_state == nome_estado]], "%22}]},options:{scales:{yAxes:[{ticks:{beginAtZero:true}}]}}}' style='width:100%;height:100%;'>",
+    "</div>",
     "</div>"
   )
 }
@@ -66,23 +80,27 @@ estados$grafico_popup <- graficos_html
 leaflet_map <- leaflet(estados) %>%
   addProviderTiles("CartoDB.Positron") %>%
   addPolygons(
-    fillColor = ~cor_estado,
+    fillColor = ~cor_regiao,
     weight = 1,
     opacity = 1,
-    color = "black",
+    color = "white",
     fillOpacity = 0.7,
     group = ~region,
     label = ~paste0(name_state),
     popup = ~paste0(
-      "<strong>Estado:</strong> ", name_state, "<br>",
-      "<strong>Sigla:</strong> ", abbrev_state, "<br>",
-      "<strong>Região:</strong> ", region, "<br>",
-      "<strong>População Estimada (IBGE 2022):</strong> ", format(populacao, big.mark = "."), "<br><br>",
-      grafico_popup
+      "<div style='font-family: Roboto, sans-serif;'>",
+      "<h3 style='color: #2d3748; margin-bottom: 10px;'>", name_state, "</h3>",
+      "<div style='background-color: #f7fafc; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>",
+      "<p><strong>Sigla:</strong> ", abbrev_state, "</p>",
+      "<p><strong>Região:</strong> ", region, "</p>",
+      "<p><strong>População Estimada (IBGE 2022):</strong> ", format(populacao, big.mark = "."), "</p>",
+      "</div>",
+      grafico_popup,
+      "</div>"
     ),
     highlight = highlightOptions(
       weight = 3,
-      color = "blue",
+      color = "#2d3748",
       fillOpacity = 0.9,
       bringToFront = TRUE
     )
@@ -90,6 +108,13 @@ leaflet_map <- leaflet(estados) %>%
   addLayersControl(
     overlayGroups = c("Norte", "Nordeste", "Centro Oeste", "Sudeste", "Sul"),
     options = layersControlOptions(collapsed = FALSE)
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    colors = cores_regiao,
+    labels = names(cores_regiao),
+    title = "Regiões do Brasil",
+    opacity = 0.7
   )
 
 # Exibir Mapa
