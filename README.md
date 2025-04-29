@@ -69,12 +69,11 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## ✨ Agradecimentos
 
-- IBGE por fornecer os dados geográficos
 - Comunidade R por suas incríveis ferramentas de visualização
 - Todos os contribuidores que ajudaram a melhorar este projeto
 
 ## 📫 Contato
 
-Seu Nome - [@seu_twitter](https://twitter.com/seu_twitter) - email@exemplo.com
+Email: cesarlimarebelo@outlook.com
 
-Link do Projeto: [https://github.com/yourusername/maps_brazil](https://github.com/yourusername/maps_brazil) 
+Link do Projeto: [https://github.com/Rebelo81/maps_brazil](https://github.com/Rebelo81/maps_brazil) 
