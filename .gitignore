@@ -1,0 +1,31 @@
+# R specific files
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+# Output files
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.tiff
+*.bmp
+*.ico
+*.svg 
