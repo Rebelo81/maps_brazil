@@ -2,6 +2,7 @@
 [![R](https://img.shields.io/badge/R-276DC3?style=for-the-badge&logo=r&logoColor=white)](https://www.r-project.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/yourusername/maps_brazil.svg?style=social)](https://github.com/Rebelo81/maps_brazil)
+
 Este projeto cria uma visualização interativa do mapa do Brasil usando R. A visualização permite que os usuários explorem diferentes regiões do Brasil com recursos interativos.
 
 ## 🚀 Funcionalidades
