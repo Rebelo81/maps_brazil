@@ -74,6 +74,7 @@ Link do Projeto: [https://github.com/Rebelo81/maps_brazil](https://github.com/Re
 ## Atualizações
 
 - [30/04/2025] Removida a seção "População Visualizada" para corrigir problemas de visualização no mapa interativo.
+- 
 
 
 
