@@ -1,6 +1,5 @@
 # Projeto: Mapa Interativo Brasil População Oficial
 # Autor: Paulo Rebelo
-# Descrição: Representação cartográfica dos estados brasileiros contendo elementos interativos na forma de pop-ups, os quais exibem informações oficiais e gráficos ilustrativos em formato reduzido, além da funcionalidade de exportação de dados para CSV.
 
 # Bibliotecas 
 library(geobr)
@@ -8,15 +7,14 @@ library(dplyr)
 library(sf)
 library(leaflet)
 library(htmlwidgets)
-library(plotly)
 library(htmltools)
 
 # Paleta de Cores
 cores_estados <- c(
   "#2b6cb0", "#3182ce", "#4299e1", "#63b3ed", "#90cdf4", # Azuis
-  "#38a169", "#48bb78", "#68d391", "#9ae6b4", # Verdes
-  "#805ad5", "#9f7aea", "#b794f4", # Roxos
-  "#d53f8c", "#ed64a6", "#f687b3"  # Rosas
+  "#38a169", "#48bb78", "#68d391", "#9ae6b4",             # Verdes
+  "#805ad5", "#9f7aea", "#b794f4",                         # Roxos
+  "#d53f8c", "#ed64a6", "#f687b3"                          # Rosas
 )
 
 # Mapa
@@ -35,13 +33,13 @@ regioes_estados <- tibble::tibble(
     "Sul", "Norte", "Norte", "Sul", "Sudeste", "Nordeste", "Norte"
   ),
   populacao = c(
-    830026,  3272391, 733759, 3807926, 14812617, 8456121, 2962995, 3973697, 6555260, 6824426,
+    830026, 3272391, 733759, 3807926, 14812617, 8456121, 2962995, 3973697, 6555260, 6824426,
     3526220, 2809394, 20524866, 8602865, 3766528, 11466630, 9137282, 3194253, 16054524, 3560902,
     10882979, 1815278, 636707, 7345692, 44606336, 2298696, 1607363
   )
 )
 
-# Informações
+# Juntar com shapefile
 estados <- estados %>%
   left_join(regioes_estados, by = "abbrev_state")
 
@@ -56,27 +54,7 @@ cores_regiao <- c(
 
 estados$cor_regiao <- cores_regiao[estados$region]
 
-# Mini Gráfico
-mini_grafico <- function(nome_estado, populacao) {
-  paste0(
-    "<div style='background-color: #f7fafc; padding: 10px; border-radius: 5px;'>",
-    "<div style='font-family: Roboto, sans-serif; font-weight: bold; margin-bottom: 10px;'>População Visualizada:</div>",
-    "<div style='height:100px;width:200px;'>",
-    "<img src='https://quickchart.io/chart?c={type:%22bar%22,data:{labels:[%22", nome_estado, "%22],datasets:[{data:[", populacao, "],backgroundColor:%22", cores_regiao[estados$region[estados$name_state == nome_estado]], "%22}]},options:{scales:{yAxes:[{ticks:{beginAtZero:true}}]}}}' style='width:100%;height:100%;'>",
-    "</div>",
-    "</div>"
-  )
-}
-
-# Vetor Mini Gráfico
-graficos_html <- sapply(1:nrow(estados), function(i) {
-  mini_grafico(estados$name_state[i], estados$populacao[i])
-})
-
-# Gráfico Dataframe
-estados$grafico_popup <- graficos_html
-
-# Mapa Interativo
+# Mapa Interativo sem mini gráfico
 leaflet_map <- leaflet(estados) %>%
   addProviderTiles("CartoDB.Positron") %>%
   addPolygons(
@@ -90,12 +68,11 @@ leaflet_map <- leaflet(estados) %>%
     popup = ~paste0(
       "<div style='font-family: Roboto, sans-serif;'>",
       "<h3 style='color: #2d3748; margin-bottom: 10px;'>", name_state, "</h3>",
-      "<div style='background-color: #f7fafc; padding: 10px; border-radius: 5px; margin-bottom: 10px;'>",
+      "<div style='background-color: #f7fafc; padding: 10px; border-radius: 5px;'>",
       "<p><strong>Sigla:</strong> ", abbrev_state, "</p>",
       "<p><strong>Região:</strong> ", region, "</p>",
       "<p><strong>População Estimada (IBGE 2022):</strong> ", format(populacao, big.mark = "."), "</p>",
       "</div>",
-      grafico_popup,
       "</div>"
     ),
     highlight = highlightOptions(
@@ -120,12 +97,14 @@ leaflet_map <- leaflet(estados) %>%
 # Exibir Mapa
 leaflet_map
 
-# Mapa HTML
+# Salvar HTML
 saveWidget(leaflet_map, "mapa_brasil_interativo.html", selfcontained = TRUE)
 
-# CSV
+# Exportar CSV
 dados_exportar <- estados %>%
   select(name_state, abbrev_state, region, populacao)
 
 write.csv(dados_exportar, "dados_estados_brasil.csv", row.names = FALSE)
+
+
 
