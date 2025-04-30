@@ -70,3 +70,10 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 Email: cesarlimarebelo@outlook.com
 
 Link do Projeto: [https://github.com/Rebelo81/maps_brazil](https://github.com/Rebelo81/maps_brazil) 
+
+## Atualizações
+
+- [30/04/2025] Removida a seção "População Visualizada" para corrigir problemas de visualização no mapa interativo.
+
+
+
